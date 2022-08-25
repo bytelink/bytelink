@@ -11,16 +11,16 @@ class ZerocomError(Exception):
 class MalformedPacketState(Enum):
     """Enum describing all possible states for a malformed packet."""
 
-    MALFORMED_PACKET_ID = "Failed to read packet id"
+    MALFORMED_PACKET_DATA = "Failed to read packet data"
     UNRECOGNIZED_PACKET_ID = "Unknown packet id"
-    MALFORMED_PACKET_BODY = "Reading packet failed"
+    MALFORMED_PACKET_BODY = "Failed to deserialize packet"
 
 
 class MalformedPacketError(ZerocomError):
     """Exception representing an issue while receiving packet."""
 
     @overload
-    def __init__(self, state: Literal[MalformedPacketState.MALFORMED_PACKET_ID], *, ioerror: IOError):
+    def __init__(self, state: Literal[MalformedPacketState.MALFORMED_PACKET_DATA], *, ioerror: IOError):
         ...
 
     @overload
