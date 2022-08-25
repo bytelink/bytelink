@@ -2,36 +2,63 @@ from __future__ import annotations
 
 from zerocom.exceptions import MalformedPacketError, MalformedPacketState
 from zerocom.packets.abc import Packet
-from zerocom.packets.message import MessagePacket
-from zerocom.protocol.base_io import BaseReader, BaseWriter, StructFormat
+from zerocom.protocol.base_io import BaseReader, BaseWriter
+from zerocom.protocol.buffer import Buffer
 
-_PACKETS: list[type[Packet]] = [MessagePacket]
+_PACKETS: list[type[Packet]] = []
 PACKET_MAP: dict[int, type[Packet]] = {}
 
 for packet_cls in _PACKETS:
     PACKET_MAP[packet_cls.PACKET_ID] = packet_cls
 
 
-# TODO: Consider adding these functions into BaseWriter/BaseReader
+# PACKET FORMAT:
+# | Field name  | Field type    | Notes                                 |
+# |-------------|---------------|---------------------------------------|
+# | Length      | 32-bit varint | Length (in bytes) of PacketID + Data  |
+# | Packet ID   | 32-bit varint |                                       |
+# | Data        | byte array    | Internal data to packet of given id   |
+
+
+def _serialize_packet(packet: Packet) -> Buffer:
+    """Serialize the internal packet data, along with it's pacekt id."""
+    packet_buf = Buffer()
+    packet_buf.write_varint(packet.PACKET_ID, max_bits=32)
+    packet_buf.write(packet.serialize())
+    return packet_buf
+
+
+def _deserialize_packet(data: Buffer) -> Packet:
+    """Deserialize the packet id and it's internal data."""
+    try:
+        packet_id = data.read_varint(max_bits=32)
+        packet_data = data.read(data.remaining)
+    except IOError as exc:
+        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_DATA, ioerror=exc)
+
+    try:
+        packet_cls = PACKET_MAP[packet_id]
+    except KeyError:
+        raise MalformedPacketError(MalformedPacketState.UNRECOGNIZED_PACKET_ID, packet_id=packet_id)
+
+    try:
+        return packet_cls.deserialize(Buffer(packet_data))
+    except IOError as exc:
+        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_BODY, ioerror=exc, packet_id=packet_id)
 
 
 def write_packet(writer: BaseWriter, packet: Packet) -> None:
     """Write given packet."""
-    writer.write_value(StructFormat.SHORT, packet.PACKET_ID)
-    packet.write(writer)
+    data_buf = _serialize_packet(packet)
+    writer.write_varint(len(data_buf), max_bits=32)
+    writer.write(data_buf)
 
 
 def read_packet(reader: BaseReader) -> Packet:
     """Read any arbitrary packet based on it's ID."""
     try:
-        packet_id = reader.read_value(StructFormat.SHORT)
+        length = reader.read_varint(max_bits=32)
+        data = reader.read(length)
     except IOError as exc:
-        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_ID, ioerror=exc)
-
-    if packet_id not in PACKET_MAP:
-        raise MalformedPacketError(MalformedPacketState.UNRECOGNIZED_PACKET_ID, packet_id=packet_id)
-
-    try:
-        return PACKET_MAP[packet_id].read(reader)
-    except IOError as exc:
-        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_BODY, ioerror=exc, packet_id=packet_id)
+        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_DATA, ioerror=exc)
+    return _deserialize_packet(Buffer(data))

@@ -1,9 +1,13 @@
 from __future__ import annotations
 
-from abc import ABC
-from typing import ClassVar
+from abc import ABC, abstractmethod
+from typing import ClassVar, TYPE_CHECKING
 
+from zerocom.protocol.buffer import Buffer
 from zerocom.protocol.rw_capable import ReadWriteCapable
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 
 class Packet(ReadWriteCapable, ABC):
@@ -17,3 +21,21 @@ class Packet(ReadWriteCapable, ABC):
         if not hasattr(cls, "PACKET_ID"):
             raise TypeError(f"Can't instantiate abstract {cls.__name__} class without defining PACKET_ID variable.")
         return super().__init__(*args, **kwargs)
+
+    @classmethod
+    @abstractmethod
+    def deserialize(cls, data: Buffer) -> Self:
+        """Construct a packet from a buffer of bytes."""
+        raise NotImplementedError
+
+    def serialize(self) -> Buffer:
+        """Deconstruct a packet and represent it as a buffer of bytes."""
+        raise NotImplementedError
+
+
+class ServerBoundPacket(Packet):
+    """Packet bound to a server (client -> server)."""
+
+
+class ClientBoundPacket(Packet):
+    """Packet bound to a client (server -> client)."""
