@@ -67,3 +67,8 @@ class Buffer(BaseReader, BaseWriter, bytearray):
         data = self[self.pos : len(self)]
         self.clear()
         return data
+
+    @property
+    def remaining(self) -> int:
+        """Get the amount of bytes that's still remaining in be buffer to be read."""
+        return len(self) - self.pos
