@@ -28,6 +28,7 @@ class Packet(ReadWriteCapable, ABC):
         """Construct a packet from a buffer of bytes."""
         raise NotImplementedError
 
+    @abstractmethod
     def serialize(self) -> Buffer:
         """Deconstruct a packet and represent it as a buffer of bytes."""
         raise NotImplementedError
