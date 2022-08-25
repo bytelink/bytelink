@@ -51,15 +51,13 @@ def _deserialize_packet(data: Buffer) -> Packet:
 async def write_packet(writer: BaseAsyncWriter, packet: Packet) -> None:
     """Write given packet."""
     data_buf = _serialize_packet(packet)
-    await writer.write_varint(len(data_buf), max_bits=32)
-    await writer.write(data_buf)
+    await writer.write_bytearray(data_buf, max_varuint_bits=32)
 
 
 async def read_packet(reader: BaseAsyncReader) -> Packet:
     """Read any arbitrary packet based on it's ID."""
     try:
-        length = await reader.read_varint(max_bits=32)
-        data = await reader.read(length)
+        data = await reader.read_bytearray(max_varuint_bits=32)
     except IOError as exc:
         raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_DATA, ioerror=exc)
     return _deserialize_packet(Buffer(data))
