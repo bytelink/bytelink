@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from zerocom.protocol.base_io import BaseReader, BaseWriter
+from zerocom.protocol.base_io import BaseSyncReader, BaseSyncWriter
 
 
-class Buffer(BaseReader, BaseWriter, bytearray):
+class Buffer(BaseSyncReader, BaseSyncWriter, bytearray):
     """Buffer implementation for BaseReader and BaseWriter via python's bytearrays.
 
     This class holds all basic interactions for writing/reading data into/from internal bytearray.

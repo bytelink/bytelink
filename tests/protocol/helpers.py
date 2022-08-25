@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import Optional
 from unittest.mock import Mock
 
-from zerocom.protocol.base_io import BaseReader, BaseWriter
+from zerocom.protocol.base_io import BaseSyncReader, BaseSyncWriter
 
 
-class Reader(BaseReader):
+class Reader(BaseSyncReader):
     """Testable concrete implementation of BaseReader ABC."""
 
     def read(self, length: int) -> bytearray:
@@ -28,7 +28,7 @@ class Reader(BaseReader):
         )
 
 
-class Writer(BaseWriter):
+class Writer(BaseSyncWriter):
     """Initializable concrete implementation of BaseWriter ABC."""
 
     def write(self, data: bytearray) -> None:
