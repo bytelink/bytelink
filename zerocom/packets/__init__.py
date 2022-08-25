@@ -3,7 +3,7 @@ from __future__ import annotations
 from zerocom.exceptions import MalformedPacketError, MalformedPacketState
 from zerocom.packets.abc import Packet
 from zerocom.packets.ping import Ping, Pong
-from zerocom.protocol.base_io import BaseReader, BaseWriter
+from zerocom.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
 from zerocom.protocol.buffer import Buffer
 
 _PACKETS: list[type[Packet]] = [Ping, Pong]
@@ -48,18 +48,18 @@ def _deserialize_packet(data: Buffer) -> Packet:
         raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_BODY, ioerror=exc, packet_id=packet_id)
 
 
-def write_packet(writer: BaseWriter, packet: Packet) -> None:
+async def write_packet(writer: BaseAsyncWriter, packet: Packet) -> None:
     """Write given packet."""
     data_buf = _serialize_packet(packet)
-    writer.write_varint(len(data_buf), max_bits=32)
-    writer.write(data_buf)
+    await writer.write_varint(len(data_buf), max_bits=32)
+    await writer.write(data_buf)
 
 
-def read_packet(reader: BaseReader) -> Packet:
+async def read_packet(reader: BaseAsyncReader) -> Packet:
     """Read any arbitrary packet based on it's ID."""
     try:
-        length = reader.read_varint(max_bits=32)
-        data = reader.read(length)
+        length = await reader.read_varint(max_bits=32)
+        data = await reader.read(length)
     except IOError as exc:
         raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_DATA, ioerror=exc)
     return _deserialize_packet(Buffer(data))
