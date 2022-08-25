@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from zerocom.exceptions import MalformedPacketError, MalformedPacketState
 from zerocom.packets.abc import Packet
+from zerocom.packets.ping import Ping, Pong
 from zerocom.protocol.base_io import BaseReader, BaseWriter
 from zerocom.protocol.buffer import Buffer
 
-_PACKETS: list[type[Packet]] = []
+_PACKETS: list[type[Packet]] = [Ping, Pong]
 PACKET_MAP: dict[int, type[Packet]] = {}
 
 for packet_cls in _PACKETS:
