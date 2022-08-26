@@ -3,8 +3,10 @@ from __future__ import annotations
 import asyncio
 from typing import TYPE_CHECKING
 
+from zerocom.config import PROTOCOL_VERSION
 from zerocom.network.connection import Connection
 from zerocom.packets import read_packet, write_packet
+from zerocom.packets.handshaking import Handshake
 from zerocom.packets.ping import Ping, Pong
 
 if TYPE_CHECKING:
@@ -25,6 +27,10 @@ class Client:
         return cls(server_address, timeout, connection)
 
     async def connect(self) -> None:
+        print("Sending a handshake")
+        packet = Handshake(PROTOCOL_VERSION)
+        await write_packet(self.connection, packet)
+
         print("Sending ping request..")
         packet = Ping("myrandomtoken")
         await write_packet(self.connection, packet)
