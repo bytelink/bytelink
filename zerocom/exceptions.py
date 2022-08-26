@@ -8,6 +8,12 @@ class ZerocomError(Exception):
     ...
 
 
+class DisconnectError(ZerocomError):
+    def __init__(self, message: str = ""):
+        self.message = message
+        return super().__init__(message)
+
+
 class MalformedPacketState(Enum):
     """Enum describing all possible states for a malformed packet."""
 
