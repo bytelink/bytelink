@@ -59,5 +59,5 @@ async def read_packet(reader: BaseAsyncReader) -> Packet:
     try:
         data = await reader.read_bytearray(max_varuint_bits=32)
     except IOError as exc:
-        raise MalformedPacketError(MalformedPacketState.MALFORMED_PACKET_DATA, ioerror=exc)
+        raise MalformedPacketError(MalformedPacketState.NO_DATA, ioerror=exc)
     return _deserialize_packet(Buffer(data))

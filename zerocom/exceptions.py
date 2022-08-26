@@ -36,6 +36,7 @@ class DisconnectError(ZerocomError):
 class MalformedPacketState(Enum):
     """Enum describing all possible states for a malformed packet."""
 
+    NO_DATA = "No data received were"
     MALFORMED_PACKET_DATA = "Failed to read packet data"
     UNRECOGNIZED_PACKET_ID = "Unknown packet id"
     MALFORMED_PACKET_BODY = "Failed to deserialize packet"
@@ -44,6 +45,10 @@ class MalformedPacketState(Enum):
 
 class MalformedPacketError(ZerocomError):
     """Exception representing an issue while receiving packet."""
+
+    @overload
+    def __init__(self, state: Literal[MalformedPacketState.NO_DATA], *, ioerror: IOError):
+        ...
 
     @overload
     def __init__(self, state: Literal[MalformedPacketState.MALFORMED_PACKET_DATA], *, ioerror: IOError):
