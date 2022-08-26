@@ -39,7 +39,7 @@ class MalformedPacketState(Enum):
     MALFORMED_PACKET_DATA = "Failed to read packet data"
     UNRECOGNIZED_PACKET_ID = "Unknown packet id"
     MALFORMED_PACKET_BODY = "Failed to deserialize packet"
-    UNEXPECTED_PACKET = "This packet type was not expected."
+    UNEXPECTED_PACKET = "This packet type was not expected"
 
 
 class MalformedPacketError(ZerocomError):
