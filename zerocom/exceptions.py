@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Literal, Optional, overload
+from typing import Literal, Optional, TYPE_CHECKING, overload
+
+if TYPE_CHECKING:
+    from zerocom.packets.abc import Packet
 
 
 class ZerocomError(Exception):
@@ -20,6 +23,7 @@ class MalformedPacketState(Enum):
     MALFORMED_PACKET_DATA = "Failed to read packet data"
     UNRECOGNIZED_PACKET_ID = "Unknown packet id"
     MALFORMED_PACKET_BODY = "Failed to deserialize packet"
+    UNEXPECTED_PACKET = "This packet type was not expected."
 
 
 class MalformedPacketError(ZerocomError):
@@ -37,15 +41,22 @@ class MalformedPacketError(ZerocomError):
     def __init__(self, state: Literal[MalformedPacketState.MALFORMED_PACKET_BODY], *, ioerror: IOError, packet_id: int):
         ...
 
+    @overload
+    def __init__(self, state: Literal[MalformedPacketState.UNEXPECTED_PACKET], *, packet: Packet):
+        ...
+
     def __init__(
         self,
         state: MalformedPacketState,
         *,
         ioerror: Optional[IOError] = None,
         packet_id: Optional[int] = None,
+        packet: Optional[Packet] = None,
     ):
         self.state = state
-        self.packet_id = packet_id
+
+        self.packet = packet
+        self.packet_id = packet_id if not packet else packet.PACKET_ID
         self.ioerror = ioerror
 
         msg_tail = []
@@ -53,6 +64,8 @@ class MalformedPacketError(ZerocomError):
             msg_tail.append(f"Packet ID: {self.packet_id}")
         if self.ioerror:
             msg_tail.append(f"Underlying IOError data: {self.ioerror}")
+        if self.packet:
+            msg_tail.append(f"Packet: {self.packet}")
 
         msg = self.state.value
         if len(msg_tail) > 0:
