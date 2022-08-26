@@ -5,6 +5,7 @@ import toml
 
 # Hard-coded constants
 VERSION = "0.1.0"
+PROTOCOL_VERSION = 1
 BANNER = dedent(
     """
  ____               _____
