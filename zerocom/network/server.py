@@ -41,7 +41,8 @@ class BaseServer(ABC):
     async def __aexit__(self, *args, **kwargs) -> None:
         await self._server.__aexit__(*args, **kwargs)
 
-    async def run_forever(self) -> None:
+    async def listen(self) -> None:
+        """Start listening for connections until the server is closed."""
         async with self:
             await self._server.wait_closed()
 
