@@ -66,7 +66,15 @@ class BaseServer(ABC):
     ) -> None:
         """This function is ran as a callback whenever a new client connects to the server."""
         client_conn = Connection(client_reader, client_writer, self.timeout)
-        await self.on_connect(client_conn)
+
+        try:
+            await self.on_connect(client_conn)
+        except DisconnectError as exc:
+            try:
+                await self.on_close(client_conn, exc)
+                return
+            finally:
+                client_conn.close()
 
         while True:
             try:
