@@ -72,10 +72,11 @@ class BaseServer(ABC):
             try:
                 await self._process_packet(client_conn)
             except DisconnectError as exc:
-                await self.on_close(client_conn, exc)
-                break
-            finally:
-                client_conn.close()
+                try:
+                    await self.on_close(client_conn, exc)
+                    break
+                finally:
+                    client_conn.close()
 
     async def _process_packet(self, client_conn: Connection) -> None:
         """Listen for a single incoming packet from client and handle it."""
