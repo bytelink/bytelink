@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, cast
 
 from zerocom.exceptions import DisconnectError, MalformedPacketError, MalformedPacketState, ProcessingError, ReadError
 from zerocom.network.connection import Connection
@@ -93,6 +93,11 @@ class BaseServer(ABC):
         except DisconnectError as exc:
             raise exc
         except Exception as exc:
+            if isinstance(exc, MalformedPacketError) and exc.state is MalformedPacketState.NO_DATA:
+                ioerr = cast(IOError, exc.ioerror)
+                if ioerr.args[0] == "Server did not respond with any information.":
+                    raise DisconnectError("Timed out")
+
             err = ReadError(exc, "Unexpected error while reading packet")
             await self.on_error(client_conn, err)
             return
