@@ -36,7 +36,7 @@ class DisconnectError(ZerocomError):
 class MalformedPacketState(Enum):
     """Enum describing all possible states for a malformed packet."""
 
-    NO_DATA = "No data received were"
+    NO_DATA = "No data were received"
     MALFORMED_PACKET_DATA = "Failed to read packet data"
     UNRECOGNIZED_PACKET_ID = "Unknown packet id"
     MALFORMED_PACKET_BODY = "Failed to deserialize packet"
