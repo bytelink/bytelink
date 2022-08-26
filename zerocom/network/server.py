@@ -70,14 +70,14 @@ class BaseServer(ABC):
 
         while True:
             try:
-                await self._listen_for_client(client_conn)
+                await self._process_packet(client_conn)
             except DisconnectError as exc:
                 await self.on_close(client_conn, exc)
                 break
             finally:
                 client_conn.close()
 
-    async def _listen_for_client(self, client_conn: Connection) -> None:
+    async def _process_packet(self, client_conn: Connection) -> None:
         """Listen for a single incoming packet from client and handle it."""
         try:
             packet = await self.read_packet(client_conn)
