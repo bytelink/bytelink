@@ -4,13 +4,12 @@ from abc import ABC, abstractmethod
 from typing import ClassVar, TYPE_CHECKING
 
 from zerocom.protocol.buffer import Buffer
-from zerocom.protocol.rw_capable import ReadWriteCapable
 
 if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-class Packet(ReadWriteCapable, ABC):
+class Packet(ABC):
     """Base class for all packets"""
 
     PACKET_ID: ClassVar[int]
