@@ -84,7 +84,7 @@ class MalformedPacketError(ZerocomError):
         if self.packet_id:
             msg_tail.append(f"Packet ID: {self.packet_id}")
         if self.ioerror:
-            msg_tail.append(f"Underlying IOError data: {self.ioerror}")
+            msg_tail.append(f"Underlying IOError data: {self.ioerror!r}")
         if self.packet:
             msg_tail.append(f"Packet: {self.packet}")
 
