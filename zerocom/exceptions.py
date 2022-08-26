@@ -11,6 +11,22 @@ class ZerocomError(Exception):
     ...
 
 
+class _WrapperError(ZerocomError):
+    """Represent an arbitrary exception that wraps another exception."""
+
+    def __init__(self, exc: Exception, msg: str = ""):
+        self.exc = exc
+        super().__init__(msg)
+
+
+class ReadError(_WrapperError):
+    """Represents an arbitrary exception which occurred while reading data."""
+
+
+class ProcessingError(_WrapperError):
+    """Represents an arbitrary exception which occurred while processing data."""
+
+
 class DisconnectError(ZerocomError):
     def __init__(self, message: str = ""):
         self.message = message
