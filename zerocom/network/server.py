@@ -5,10 +5,12 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Union, cast
 
+from zerocom.config import PROTOCOL_VERSION
 from zerocom.exceptions import DisconnectError, MalformedPacketError, MalformedPacketState, ProcessingError, ReadError
 from zerocom.network.connection import Connection
 from zerocom.packets import read_packet, write_packet
 from zerocom.packets.abc import ClientBoundPacket, ServerBoundPacket
+from zerocom.packets.handshaking import Handshake
 from zerocom.packets.ping import Ping, Pong
 
 if TYPE_CHECKING:
@@ -128,8 +130,32 @@ class BaseServer(ABC):
 
 
 class Server(BaseServer):
+    async def process_handshake(self, client_conn: Connection) -> None:
+        """Read and process a handshake packet, ensuring client is on the same protocol version."""
+        log.debug(f"Listening for a handshake from {client_conn.address}...")
+
+        try:
+            packet = await self.read_packet(client_conn)
+        except Exception as exc:
+            log.warning(f"Client {client_conn.address} sent invalid handshake: {exc}")
+            raise DisconnectError("Failed to read handshake packet")
+
+        if not isinstance(packet, Handshake):
+            log.warning(f"Client {client_conn.address} sent invalid handshake: Got {packet} instead")
+            raise DisconnectError("First packet must be a handshake packet.")
+
+        if packet.protocol_version != PROTOCOL_VERSION:
+            log.warning(
+                f"Client {client_conn.address} tried to connect with different protocol version"
+                f" (server version={PROTOCOL_VERSION}, client version={packet.protocol_version})."
+            )
+            raise DisconnectError(f"Mismatched protocol versions, server version: {PROTOCOL_VERSION}")
+
+        log.debug(f"Handshake with {client_conn.address} successful, protocol versions match")
+
     async def on_connect(self, client_conn: Connection) -> None:
         log.info(f"New connection from: {client_conn.address}")
+        await self.process_handshake(client_conn)
 
     async def on_error(self, client_conn: Connection, exc: Union[ProcessingError, ReadError]) -> None:
         log.debug(f"Handling error: {exc}")
