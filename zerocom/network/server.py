@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import asyncio
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
+from zerocom.exceptions import DisconnectError
 from zerocom.network.connection import Connection
-from zerocom.packets import read_packet
-from zerocom.packets.abc import Packet
+from zerocom.packets import read_packet, write_packet
+from zerocom.packets.abc import ClientBoundPacket, Packet, ServerBoundPacket
+from zerocom.packets.ping import Ping, Pong
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -38,9 +40,32 @@ class Server:
     async def on_connect(self, client_reader: asyncio.StreamReader, client_writer: asyncio.StreamWriter) -> None:
         """Function called each time a new client is connected."""
         client_conn = Connection(client_reader, client_writer, self.timeout)
+
         while True:
-            packet = await read_packet(client_conn)
-            await self.process_packet(client_conn, packet)
+            try:
+                try:
+                    packet = await read_packet(client_conn)
+                except (IOError, asyncio.exceptions.TimeoutError) as exc:
+                    await self.on_error(client_conn, exc)
+                else:
+                    await self.process_packet(client_conn, packet)
+            except DisconnectError as exc:
+                await self.on_close(client_conn, exc)
+                break
+
+    async def on_error(self, client: Connection, exc: Exception) -> None:
+        print(f"Got exc: {exc!r}")
+        raise DisconnectError("Failed to read packet")
+
+    async def on_close(self, client: Connection, exc: DisconnectError) -> None:
+        client.close()
 
     async def process_packet(self, client: Connection, packet: Packet) -> None:
-        ...
+        if isinstance(packet, ClientBoundPacket):
+            raise DisconnectError("Client sent a client-bound packet to server")
+        packet = cast(ServerBoundPacket, packet)
+        print(f"Processing packet: {packet}")
+
+        if isinstance(packet, Ping):
+            resp_packet = Pong(packet.token)
+            await write_packet(client, resp_packet)
