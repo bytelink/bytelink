@@ -158,12 +158,12 @@ class Server(BaseServer):
         await self.process_handshake(client_conn)
 
     async def on_error(self, client_conn: Connection, exc: Union[ProcessingError, ReadError]) -> None:
-        log.debug(f"Handling error: {exc}")
+        log.debug(f"Handling error: {exc!r}")
 
         if isinstance(exc, ReadError):
-            log.warning(f"Error occurred when reading a packet from {client_conn.address}: {exc.exc}")
+            log.warning(f"Error occurred when reading a packet from {client_conn.address}: {exc.exc!r}")
         elif isinstance(exc, ProcessingError):
-            log.warning(f"Error occurred when processing a packet from {client_conn.address}: {exc.exc}")
+            log.warning(f"Error occurred when processing a packet from {client_conn.address}: {exc.exc!r}")
 
         raise DisconnectError("...")
 
