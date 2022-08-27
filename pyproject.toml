@@ -52,8 +52,8 @@ format = "black . && isort ."
 test = "pytest -v --failed-first"
 retest = "pytest -v --last-failed"
 test-nocov = "pytest -v --no-cov --failed-first"
-server = "python -m zerocom.server"
-client = "python -m zerocom.client"
+server = "python -m zerocom.bin.server"
+client = "python -m zerocom.bin.client"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
