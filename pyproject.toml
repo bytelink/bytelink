@@ -28,6 +28,7 @@ pyright = "^1.1.252"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 pytest-asyncio = "^0.19.0"
+pip-licenses = "^3.5.4"
 
 [tool.black]
 line-length = 120
@@ -51,6 +52,7 @@ addopts = "--strict-markers --cov=zerocom --cov-branch --cov-report=term-missing
 precommit = "pre-commit install"
 lint = "pre-commit run --all-files"
 format = "black . && isort ."
+licenses = "pip-licenses --package $(poetry export -f requirements.txt --without-hashes | sed 's/==.*//g' | tr '\n' ' ')"
 test = "pytest -v --failed-first"
 retest = "pytest -v --last-failed"
 test-nocov = "pytest -v --no-cov --failed-first"
