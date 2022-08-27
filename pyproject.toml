@@ -53,9 +53,11 @@ precommit = "pre-commit install"
 lint = "pre-commit run --all-files"
 format = "black . && isort ."
 licenses = "pip-licenses --package $(poetry export -f requirements.txt --without-hashes | sed 's/==.*//g' | tr '\n' ' ')"
+
 test = "pytest -v --failed-first"
 retest = "pytest -v --last-failed"
 test-nocov = "pytest -v --no-cov --failed-first"
+
 server = "python -m zerocom.bin.server"
 client = "python -m zerocom.bin.client"
 
