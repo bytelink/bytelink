@@ -26,6 +26,7 @@ env:
 
 jobs:
   unit-tests:
+    name: Running python ${{ matrix.python-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.platform }}
 
     strategy:
