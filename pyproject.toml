@@ -27,6 +27,7 @@ isort = "^5.10.1"
 pyright = "^1.1.252"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
+pytest-asyncio = "^0.19.0"
 
 [tool.black]
 line-length = 120
@@ -42,6 +43,7 @@ skip = [".venv", ".git", ".cache"]
 [tool.pytest.ini_options]
 minversion = "6.0"
 testpaths = ["tests"]
+asyncio_mode = "auto"
 addopts = "--strict-markers --cov=zerocom --cov-branch --cov-report=term-missing --cov-report html --no-cov-on-fail"
 
 
