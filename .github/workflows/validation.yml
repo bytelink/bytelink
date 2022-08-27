@@ -24,6 +24,20 @@ env:
   PYTHONUSERBASE: ${{ github.workspace }}/.cache/py-user-base
   PRE_COMMIT_HOME: ${{ github.workspace }}/.cache/pre-commit-cache
 
+  # List of licenses compatible with the GPL-3.0 license and can
+  # be used in our project
+  ALLOWED_LICENSE: Apache Software License;
+    BSD License;
+    MIT License;
+    Public Domain;
+    ISC License (ISCL);
+    Python Software Foundation License;
+    GNU Library or Lesser General Public License (LGPL);
+    Mozilla Public License 2.0 (MPL 2.0);
+    GNU General Public License v3 or later (GPLv3+);
+    GNU General Public License v3 (GPLv3)
+
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -73,6 +87,9 @@ jobs:
                 ${{ hashFiles('./.pre-commit-config.yaml') }}"
 
       # Run the actual linting steps here:
+
+      - name: Check license compatibility with build dependencies
+        run: task licenses --allow-only="$ALLOWED_LICENSE"
 
       # We skip the major hooks here, because we want to see their output, and
       # success status separately in another task. They are ran below.
