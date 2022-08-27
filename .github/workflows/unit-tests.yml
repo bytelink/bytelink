@@ -27,12 +27,12 @@ env:
 jobs:
   unit-tests:
     name: Running python ${{ matrix.python-version }} on ${{ matrix.os }}
-    runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false  # Run the other workflows even if one failed
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.8", "3.10"]
 
     steps:
