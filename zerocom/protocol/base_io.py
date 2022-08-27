@@ -4,9 +4,12 @@ import struct
 from abc import ABC, abstractmethod
 from enum import Enum
 from itertools import count
-from typing import Literal, TypeAlias, Union, overload
+from typing import Literal, TYPE_CHECKING, Union, overload
 
 from zerocom.protocol.utils import from_twos_complement, to_twos_complement
+
+if TYPE_CHECKING:
+    from typing_extensions import TypeAlias
 
 
 class StructFormat(str, Enum):
