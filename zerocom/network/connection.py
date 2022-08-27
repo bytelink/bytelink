@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import socket
 from typing import Generic, TypeVar
 
 from zerocom.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
@@ -16,6 +17,9 @@ class Connection(BaseAsyncReader, BaseAsyncWriter, Generic[T_STREAMREADER, T_STR
         self.reader = reader
         self.writer = writer
         self.timeout = timeout
+
+        _sock: socket.socket = self.writer.transport._sock  # type: ignore # _sock should be defined at this point
+        self.address = _sock.getsockname()
 
     async def read(self, length: int) -> bytearray:
         result = bytearray()
