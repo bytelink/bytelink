@@ -4,7 +4,7 @@ import asyncio
 import socket
 from typing import Generic, TypeVar
 
-from zerocom.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
+from bytelink.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
 
 T_STREAMREADER = TypeVar("T_STREAMREADER", bound=asyncio.StreamReader)
 T_STREAMWRITER = TypeVar("T_STREAMWRITER", bound=asyncio.StreamWriter)

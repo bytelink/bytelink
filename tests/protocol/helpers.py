@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional
 from unittest.mock import Mock
 
-from zerocom.protocol.base_io import BaseSyncReader, BaseSyncWriter
+from bytelink.protocol.base_io import BaseSyncReader, BaseSyncWriter
 
 
 class Reader(BaseSyncReader):

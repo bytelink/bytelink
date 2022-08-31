@@ -5,13 +5,13 @@ import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Union, cast
 
-from zerocom.config import PROTOCOL_VERSION
-from zerocom.exceptions import DisconnectError, MalformedPacketError, MalformedPacketState, ProcessingError, ReadError
-from zerocom.network.connection import Connection
-from zerocom.packets import read_packet, write_packet
-from zerocom.packets.abc import ClientBoundPacket, ServerBoundPacket
-from zerocom.packets.handshaking import Handshake
-from zerocom.packets.ping import Ping, Pong
+from bytelink.config import PROTOCOL_VERSION
+from bytelink.exceptions import DisconnectError, MalformedPacketError, MalformedPacketState, ProcessingError, ReadError
+from bytelink.network.connection import Connection
+from bytelink.packets import read_packet, write_packet
+from bytelink.packets.abc import ClientBoundPacket, ServerBoundPacket
+from bytelink.packets.handshaking import Handshake
+from bytelink.packets.ping import Ping, Pong
 
 if TYPE_CHECKING:
     from typing_extensions import Self

@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Literal, Optional, TYPE_CHECKING, overload
 
 if TYPE_CHECKING:
-    from zerocom.packets.abc import Packet
+    from bytelink.packets.abc import Packet
 
 
 class ZerocomError(Exception):

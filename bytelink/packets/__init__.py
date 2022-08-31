@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from zerocom.exceptions import MalformedPacketError, MalformedPacketState
-from zerocom.packets.abc import Packet
-from zerocom.packets.handshaking import Handshake
-from zerocom.packets.ping import Ping, Pong
-from zerocom.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
-from zerocom.protocol.buffer import Buffer
+from bytelink.exceptions import MalformedPacketError, MalformedPacketState
+from bytelink.packets.abc import Packet
+from bytelink.packets.handshaking import Handshake
+from bytelink.packets.ping import Ping, Pong
+from bytelink.protocol.base_io import BaseAsyncReader, BaseAsyncWriter
+from bytelink.protocol.buffer import Buffer
 
 _PACKETS: list[type[Packet]] = [Ping, Pong, Handshake]
 PACKET_MAP: dict[int, type[Packet]] = {}
