@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ZeroCOM"
+name = "Bytelink"
 version = "0.1.0"
 description = "Powerful chat application, built using Python."
 authors = ["Sunrit Jana <warriordefenderz@gmail.com>", "ItsDrike <itsdrike@protonmail.com>"]

@@ -2,7 +2,7 @@
 ip = "127.0.0.1"
 port = 5000
 
-motd = "Welcome to Zerocom Chat!"
+motd = "Welcome to Bytelink Chat!"
 
 # Leave empty for system defined amount. Only integer allowed.
 max-connections = 0

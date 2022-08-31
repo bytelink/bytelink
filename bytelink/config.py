@@ -1,29 +1,20 @@
 from __future__ import annotations
 
 import os
-from textwrap import dedent
 
 import toml
 
 # Hard-coded constants
 VERSION = "0.1.0"
 PROTOCOL_VERSION = 1
-BANNER = dedent(
-    """
- ____               _____
-/_  / ___ _______  / ___/__  __ _
- / /_/ -_) __/ _ \\/ /__/ _ \\/  ' \\
-/___/\\__/_/  \\___/\\___/\\___/_/_/_/
-"""
-)
 
 # Logging setting
-DEBUG = bool(os.environ.get("ZEROCOM_DEBUG", 0))
-LOG_FILE = os.environ.get("ZEROCOM_LOG_FILE", None)
-LOG_FILE_MAX_SIZE = int(os.environ.get("ZEROCOM_LOG_FILE_SIZE_MAX", 1_048_576))  # in bytes (default: 1MiB)
+DEBUG = bool(os.environ.get("BYTELINK_DEBUG", 0))
+LOG_FILE = os.environ.get("BYTELINK_LOG_FILE", None)
+LOG_FILE_MAX_SIZE = int(os.environ.get("BYTELINK_LOG_FILE_SIZE_MAX", 1_048_576))  # in bytes (default: 1MiB)
 
 # Config file location, in this case it's `config.toml` in root
-CONFIG_FILE = os.environ.get("ZEROCOM_CONFIG_FILE", "config.toml")
+CONFIG_FILE = os.environ.get("BYTELINK_CONFIG_FILE", "config.toml")
 config = toml.load(CONFIG_FILE)
 server_config = config["server"]["config"]
 

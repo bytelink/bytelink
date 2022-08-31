@@ -7,11 +7,11 @@ if TYPE_CHECKING:
     from bytelink.packets.abc import Packet
 
 
-class ZerocomError(Exception):
+class BytelinkError(Exception):
     ...
 
 
-class _WrapperError(ZerocomError):
+class _WrapperError(BytelinkError):
     """Represent an arbitrary exception that wraps another exception."""
 
     def __init__(self, exc: Exception, msg: str = ""):
@@ -27,7 +27,7 @@ class ProcessingError(_WrapperError):
     """Represents an arbitrary exception which occurred while processing data."""
 
 
-class DisconnectError(ZerocomError):
+class DisconnectError(BytelinkError):
     def __init__(self, message: str = ""):
         self.message = message
         return super().__init__(message)
@@ -43,7 +43,7 @@ class MalformedPacketState(Enum):
     UNEXPECTED_PACKET = "This packet type was not expected"
 
 
-class MalformedPacketError(ZerocomError):
+class MalformedPacketError(BytelinkError):
     """Exception representing an issue while receiving packet."""
 
     @overload
