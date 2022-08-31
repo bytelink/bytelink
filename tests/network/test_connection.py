@@ -6,8 +6,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from bytelink.network.connection import Connection
 from tests.protocol.helpers import ReadFunctionMock, WriteFunctionMock
-from zerocom.network.connection import Connection
 
 
 class MockReader(MagicMock):

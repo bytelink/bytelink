@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import asyncio
 
-from zerocom.config import Config
-from zerocom.network.client import Client
+from bytelink.config import Config
+from bytelink.network.client import Client
 
 
 async def main() -> None:

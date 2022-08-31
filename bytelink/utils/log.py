@@ -8,11 +8,11 @@ from pathlib import Path
 
 import coloredlogs  # type: ignore # pyright complains if this isn't installed
 
-import zerocom.config
+import bytelink.config
 
-LOG_LEVEL = logging.DEBUG if zerocom.config.DEBUG else logging.INFO
-LOG_FILE = zerocom.config.LOG_FILE
-LOG_FILE_MAX_SIZE = zerocom.config.LOG_FILE_MAX_SIZE
+LOG_LEVEL = logging.DEBUG if bytelink.config.DEBUG else logging.INFO
+LOG_FILE = bytelink.config.LOG_FILE
+LOG_FILE_MAX_SIZE = bytelink.config.LOG_FILE_MAX_SIZE
 LOG_FORMAT = "%(asctime)s | %(name)s | %(levelname)7s | %(message)s"
 
 

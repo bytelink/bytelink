@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import ClassVar, TYPE_CHECKING
 
-from zerocom.packets.abc import ServerBoundPacket
-from zerocom.protocol.buffer import Buffer
+from bytelink.packets.abc import ServerBoundPacket
+from bytelink.protocol.buffer import Buffer
 
 if TYPE_CHECKING:
     from typing_extensions import Self

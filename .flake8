@@ -1,7 +1,7 @@
 [flake8]
 max_line_length=120
 extend-ignore=E203 # flake8 has conflicting handling with black here
-application-import-names=zerocom,tests
+application-import-names=bytelink,tests
 ban-relative-imports=true
 force-future-annotations=true
 exclude=.venv,.git,.cache

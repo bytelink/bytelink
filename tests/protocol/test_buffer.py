@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from zerocom.protocol.buffer import Buffer
+from bytelink.protocol.buffer import Buffer
 
 
 def test_write():

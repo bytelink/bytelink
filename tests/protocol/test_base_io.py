@@ -4,9 +4,9 @@ from typing import Any
 
 import pytest
 
+from bytelink.protocol.base_io import INT_FORMATS_TYPE, StructFormat
+from bytelink.protocol.utils import to_twos_complement
 from tests.protocol.helpers import ReadFunctionMock, Reader, WriteFunctionMock, Writer
-from zerocom.protocol.base_io import INT_FORMATS_TYPE, StructFormat
-from zerocom.protocol.utils import to_twos_complement
 
 
 class TestReader:

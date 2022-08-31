@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from zerocom.protocol.base_io import BaseSyncReader, BaseSyncWriter
+from bytelink.protocol.base_io import BaseSyncReader, BaseSyncWriter
 
 
 class Buffer(BaseSyncReader, BaseSyncWriter, bytearray):
