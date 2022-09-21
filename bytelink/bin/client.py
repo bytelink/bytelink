@@ -10,9 +10,7 @@ async def main() -> None:
     client = await Client.create((Config.IP, Config.PORT), timeout=3)
 
     async with client:
-        await client.connect()
-        await asyncio.sleep(50)
-        await client.connect()
+        await asyncio.sleep(10)
 
 
 if __name__ == "__main__":
